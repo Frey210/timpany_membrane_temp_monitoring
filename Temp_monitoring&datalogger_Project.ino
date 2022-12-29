@@ -23,7 +23,7 @@ void loop() {
   Serial.println();
 
   temp = mlx.readObjectTempC();
-  if(bt.available){
+  if(bt.available()){
     bt.print(temp);
   }
   
