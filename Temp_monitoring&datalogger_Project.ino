@@ -25,6 +25,7 @@ void loop() {
   temp = mlx.readObjectTempC();
   if(bt.available()){
     bt.print(temp);
+    bt.println(";");
   }
   
   delay(500);
