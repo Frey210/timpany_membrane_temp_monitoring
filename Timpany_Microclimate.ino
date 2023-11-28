@@ -3,11 +3,9 @@
 
 BluetoothSerial ESP_BT;
 
-int analogPin = 25;
-
-//Variabel untuk menyimpan data suhu
-float suhu = 00;
-int suhu1 = 00;
+#define ADC_VREF_mV    3300.0 
+#define ADC_RESOLUTION 4096.0
+#define PIN_LM35       25 
 
 void setup() {
   //Komunikasi serial dengan baud 9600
@@ -16,17 +14,15 @@ void setup() {
 }
 
 void loop() {
-  //Baca pin input
-  suhu1 = analogRead(analogPin);
-
-  //1'C = 10mV (sesuai datasheet)<br>// 5v /1023 = 4,883 mV (5v = tegangan refrensi, 1023 = resolusi 10 bit)
-  // setiap kenaikan 1'C --> 10 / 4.883 = 2.0479
-
-  //sehingga didapat rumus
-  suhu = (suhu1/2.0479)+2;
+  // read the ADC value from the temperature sensor
+  int adcVal = analogRead(PIN_LM35);
+  // convert the ADC value to voltage in millivolt
+  float milliVolt = adcVal * (ADC_VREF_mV / ADC_RESOLUTION);
+  // convert the voltage to the temperature in °C
+  float tempC = milliVolt / 10;
 
   //hasil pembacaan akan ditampilkan di serial monitor
-  Serial.println(suhu);
-  ESP_BT.println(suhu);
+  Serial.println(tempC);
+  ESP_BT.println(tempC);
   delay(1000);
 }
