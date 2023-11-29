@@ -5,7 +5,7 @@ BluetoothSerial ESP_BT;
 
 #define ADC_VREF_mV    3300.0 
 #define ADC_RESOLUTION 4096.0
-#define PIN_LM35       25 
+#define PIN_LM35       14 
 
 void setup() {
   //Komunikasi serial dengan baud 9600
@@ -21,8 +21,11 @@ void loop() {
   // convert the voltage to the temperature in °C
   float tempC = milliVolt / 10;
 
-  //hasil pembacaan akan ditampilkan di serial monitor
-  Serial.println(tempC);
-  ESP_BT.println(tempC);
+  // hasil pembacaan akan ditampilkan di serial monitor jika tidak ada bluetooth terhubung
+  if (ESP_BT.hasClient()) {
+    ESP_BT.println(tempC);
+  } else {
+    Serial.println(tempC);
+  }
   delay(1000);
 }
